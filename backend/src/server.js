@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
+const pool = require('./config/db');
 
+const app = express();
 app.use(express.json());
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+app.get('/health', async (req, res) => {
+  const result = await pool.query('SELECT 1');
+  res.json({ status: 'ok', db: 'connected' });
 });
 
 const PORT = process.env.PORT || 8001;
