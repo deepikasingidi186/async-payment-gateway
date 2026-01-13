@@ -14,3 +14,10 @@ const PORT = process.env.PORT || 8001;
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
+
+const paymentQueue = require('./jobs/queue');
+
+app.post('/test/queue', async (req, res) => {
+  await paymentQueue.add({ test: true });
+  res.json({ message: 'Job added to queue' });
+});
