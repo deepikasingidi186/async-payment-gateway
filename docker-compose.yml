@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: gateway_pass
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gateway_user"]
       interval: 10s
@@ -40,6 +42,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
   worker:
     build:
       context: ./backend
@@ -48,9 +51,15 @@ services:
     env_file:
       - ./backend/.env
     environment:
+      DATABASE_URL: postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway
       REDIS_URL: redis://redis:6379
     depends_on:
+      postgres:
+        condition: service_healthy
       redis:
         condition: service_healthy
       api:
         condition: service_started
+
+volumes:
+  pgdata:

@@ -16,8 +16,11 @@ app.listen(PORT, () => {
 });
 
 const paymentQueue = require('./jobs/queue');
-
 app.post('/test/queue', async (req, res) => {
   await paymentQueue.add({ test: true });
   res.json({ message: 'Job added to queue' });
 });
+
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api/v1', paymentRoutes);
+
