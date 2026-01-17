@@ -26,3 +26,6 @@ app.use('/api/v1', paymentRoutes);
 
 const refundRoutes = require('./routes/refundRoutes');
 app.use('/api/v1', refundRoutes);
+
+const testRoutes = require('./routes/testRoutes');
+app.use('/api/v1', testRoutes);
