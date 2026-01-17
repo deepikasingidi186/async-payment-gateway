@@ -1,0 +1,18 @@
+const pool = require('../config/db');
+
+exports.getCached = async (key, merchantId) => {
+  const { rows } = await pool.query(
+    `SELECT response FROM idempotency_keys
+     WHERE key=$1 AND merchant_id=$2 AND expires_at > NOW()`,
+    [key, merchantId]
+  );
+  return rows[0]?.response || null;
+};
+
+exports.saveCached = async (key, merchantId, response) => {
+  await pool.query(
+    `INSERT INTO idempotency_keys (key, merchant_id, response, expires_at)
+     VALUES ($1,$2,$3,NOW()+INTERVAL '24 hours')`,
+    [key, merchantId, response]
+  );
+};
