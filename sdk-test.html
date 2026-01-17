@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SDK Test</title>
+  <script src="./checkout-widget/dist/checkout.js"></script>
+</head>
+<body>
+  <button id="pay">Pay Now</button>
+
+  <script>
+    document.getElementById('pay').onclick = function () {
+      const checkout = new PaymentGateway({
+        key: 'key_test_abc123',
+        orderId: 'order_test_1',
+        onSuccess: (res) => alert('Success: ' + res.paymentId),
+        onFailure: () => alert('Failed'),
+        onClose: () => alert('Closed')
+      });
+      checkout.open();
+    };
+  </script>
+</body>
+</html>
